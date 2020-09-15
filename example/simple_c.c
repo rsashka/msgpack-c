@@ -20,7 +20,7 @@ int main(void)
     msgpack_sbuffer_init(&sbuf);
 
     /* serialize values into the buffer using msgpack_sbuffer_write callback function. */
-    msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write);
+    msgpack_packer_init(&pk, &sbuf, msgpack_sbuffer_write, 0);
 
     msgpack_pack_array(&pk, 3);
     msgpack_pack_int(&pk, 1);

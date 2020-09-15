@@ -55,7 +55,7 @@ int main()
     } while (0)
 
     msgpack_sbuffer_init(&sbuf);
-    x = msgpack_packer_new(&sbuf, msgpack_sbuffer_write);
+    x = msgpack_packer_new(&sbuf, msgpack_sbuffer_write, 0);
 
     msgpack_pack_fix_uint8(x, 0); check_sbuffer(cc00);          /* cc 00 */
     msgpack_pack_fix_uint8(x, 0xFF); check_sbuffer(ccff);       /* cc ff */

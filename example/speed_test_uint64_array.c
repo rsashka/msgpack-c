@@ -11,7 +11,7 @@ void test()
 
     msgpack_sbuffer_init(&buf);
 
-    pk = msgpack_packer_new(&buf, msgpack_sbuffer_write);
+    pk = msgpack_packer_new(&buf, msgpack_sbuffer_write, 0);
 
     msgpack_pack_array(pk, size);
     {

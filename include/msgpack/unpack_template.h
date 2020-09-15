@@ -144,11 +144,13 @@ msgpack_unpack_func(int, _execute)(msgpack_unpack_struct(_context)* ctx, const c
         } /* FIXME */ \
         ret = msgpack_unpack_callback(func)(user, count_, &stack[top].obj); \
         if(ret < 0) { goto _failed; } \
-        if((count_) == 0) { obj = stack[top].obj; goto _push; } \
-        stack[top].ct = ct_; \
-        stack[top].count = count_; \
-        ++top; \
-        goto _header_again
+        if((count_) >= 0) { obj = stack[top].obj; goto _push; } \
+        goto _failed;
+        // Don't read container elements, but return the number of elements to read at a higher level
+//        stack[top].ct = ct_; 
+//        stack[top].count = count_; 
+//        ++top; 
+//      goto _header_again
 
 #define NEXT_CS(p) \
         ((unsigned int)*p & 0x1f)

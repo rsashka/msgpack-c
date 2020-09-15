@@ -33,16 +33,17 @@ extern "C" {
  * @{
  */
 
-typedef int (*msgpack_packer_write)(void* data, const char* buf, size_t len);
+typedef int (*msgpack_packer_write)(void* data, const char* buf, size_t len, void* callback_param);
 
 typedef struct msgpack_packer {
     void* data;
     msgpack_packer_write callback;
+    void* callback_param;
 } msgpack_packer;
 
-static void msgpack_packer_init(msgpack_packer* pk, void* data, msgpack_packer_write callback);
+static void msgpack_packer_init(msgpack_packer* pk, void* data, msgpack_packer_write callback, void* callback_param);
 
-static msgpack_packer* msgpack_packer_new(void* data, msgpack_packer_write callback);
+static msgpack_packer* msgpack_packer_new(void* data, msgpack_packer_write callback, void* callback_param);
 static void msgpack_packer_free(msgpack_packer* pk);
 
 static int msgpack_pack_char(msgpack_packer* pk, char d);
@@ -123,21 +124,22 @@ int msgpack_pack_object(msgpack_packer* pk, msgpack_object d);
 #define msgpack_pack_user msgpack_packer*
 
 #define msgpack_pack_append_buffer(user, buf, len) \
-    return (*(user)->callback)((user)->data, (const char*)buf, len)
+    return (*(user)->callback)((user)->data, (const char*)buf, len, (user)->callback_param)
 
 #include "pack_template.h"
 
-inline void msgpack_packer_init(msgpack_packer* pk, void* data, msgpack_packer_write callback)
+inline void msgpack_packer_init(msgpack_packer* pk, void* data, msgpack_packer_write callback, void* callback_param)
 {
     pk->data = data;
     pk->callback = callback;
+    pk->callback_param = callback_param;
 }
 
-inline msgpack_packer* msgpack_packer_new(void* data, msgpack_packer_write callback)
+inline msgpack_packer* msgpack_packer_new(void* data, msgpack_packer_write callback, void* callback_param)
 {
     msgpack_packer* pk = (msgpack_packer*)calloc(1, sizeof(msgpack_packer));
     if(!pk) { return NULL; }
-    msgpack_packer_init(pk, data, callback);
+    msgpack_packer_init(pk, data, callback, callback_param);
     return pk;
 }
 

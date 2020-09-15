@@ -7,7 +7,7 @@
 void prepare(msgpack_sbuffer* sbuf) {
     msgpack_packer pk;
 
-    msgpack_packer_init(&pk, sbuf, msgpack_sbuffer_write);
+    msgpack_packer_init(&pk, sbuf, msgpack_sbuffer_write, 0);
     /* 1st object */
     msgpack_pack_array(&pk, 3);
     msgpack_pack_int(&pk, 1);

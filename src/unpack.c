@@ -200,20 +200,22 @@ static inline int template_callback_array(unpack_user* u, unsigned int n, msgpac
 #endif
 
     o->type = MSGPACK_OBJECT_ARRAY;
-    o->via.array.size = 0;
+    o->via.array.size = n;
 
-    size = n * sizeof(msgpack_object);
-
-    if (*u->z == NULL) {
-        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
-        if(*u->z == NULL) {
-            return MSGPACK_UNPACK_NOMEM_ERROR;
-        }
-    }
-
-    // Unsure whether size = 0 should be an error, and if so, what to return
-    o->via.array.ptr = (msgpack_object*)msgpack_zone_malloc(*u->z, size);
-    if(o->via.array.ptr == NULL) { return MSGPACK_UNPACK_NOMEM_ERROR; }
+    // No allock memory for ARRAY and parse condition at upper level code
+    
+//    size = n * sizeof(msgpack_object);
+//
+//    if (*u->z == NULL) {
+//        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
+//        if(*u->z == NULL) {
+//            return MSGPACK_UNPACK_NOMEM_ERROR;
+//        }
+//    }
+//
+//    // Unsure whether size = 0 should be an error, and if so, what to return
+//    o->via.array.ptr = (msgpack_object*)msgpack_zone_malloc(*u->z, size);
+//    if(o->via.array.ptr == NULL) { return MSGPACK_UNPACK_NOMEM_ERROR; }
     return 0;
 }
 
@@ -243,22 +245,25 @@ static inline int template_callback_map(unpack_user* u, unsigned int n, msgpack_
         return MSGPACK_UNPACK_NOMEM_ERROR;
 #endif
 
-    o->type = MSGPACK_OBJECT_MAP;
-    o->via.map.size = 0;
-
-    size = n * sizeof(msgpack_object_kv);
-
-    if (*u->z == NULL) {
-        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
-        if(*u->z == NULL) {
-            return MSGPACK_UNPACK_NOMEM_ERROR;
-        }
-    }
-
-    // Should size = 0 be an error? If so, what error to return?
-    o->via.map.ptr = (msgpack_object_kv*)msgpack_zone_malloc(*u->z, size);
-    if(o->via.map.ptr == NULL) { return MSGPACK_UNPACK_NOMEM_ERROR; }
-    return 0;
+    // Not support MAP obejct and realloc memory
+    return MSGPACK_UNPACK_NOMEM_ERROR;
+    
+//    o->type = MSGPACK_OBJECT_MAP;
+//    o->via.map.size = 0;
+//
+//    size = n * sizeof(msgpack_object_kv);
+//
+//    if (*u->z == NULL) {
+//        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
+//        if(*u->z == NULL) {
+//            return MSGPACK_UNPACK_NOMEM_ERROR;
+//        }
+//    }
+//
+//    // Should size = 0 be an error? If so, what error to return?
+//    o->via.map.ptr = (msgpack_object_kv*)msgpack_zone_malloc(*u->z, size);
+//    if(o->via.map.ptr == NULL) { return MSGPACK_UNPACK_NOMEM_ERROR; }
+//    return 0;
 }
 
 static inline int template_callback_map_item(unpack_user* u, msgpack_object* c, msgpack_object k, msgpack_object v)
@@ -278,12 +283,12 @@ static inline int template_callback_map_item(unpack_user* u, msgpack_object* c, 
 static inline int template_callback_str(unpack_user* u, const char* b, const char* p, unsigned int l, msgpack_object* o)
 {
     MSGPACK_UNUSED(b);
-    if (*u->z == NULL) {
-        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
-        if(*u->z == NULL) {
-            return MSGPACK_UNPACK_NOMEM_ERROR;
-        }
-    }
+//    if (*u->z == NULL) {
+//        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
+//        if(*u->z == NULL) {
+//            return MSGPACK_UNPACK_NOMEM_ERROR;
+//        }
+//    }
     o->type = MSGPACK_OBJECT_STR;
     o->via.str.ptr = p;
     o->via.str.size = l;
@@ -294,12 +299,12 @@ static inline int template_callback_str(unpack_user* u, const char* b, const cha
 static inline int template_callback_bin(unpack_user* u, const char* b, const char* p, unsigned int l, msgpack_object* o)
 {
     MSGPACK_UNUSED(b);
-    if (*u->z == NULL) {
-        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
-        if(*u->z == NULL) {
-            return MSGPACK_UNPACK_NOMEM_ERROR;
-        }
-    }
+//    if (*u->z == NULL) {
+//        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
+//        if(*u->z == NULL) {
+//            return MSGPACK_UNPACK_NOMEM_ERROR;
+//        }
+//    }
     o->type = MSGPACK_OBJECT_BIN;
     o->via.bin.ptr = p;
     o->via.bin.size = l;
@@ -313,12 +318,12 @@ static inline int template_callback_ext(unpack_user* u, const char* b, const cha
     if (l == 0) {
         return MSGPACK_UNPACK_PARSE_ERROR;
     }
-    if (*u->z == NULL) {
-        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
-        if(*u->z == NULL) {
-            return MSGPACK_UNPACK_NOMEM_ERROR;
-        }
-    }
+//    if (*u->z == NULL) {
+//        *u->z = msgpack_zone_new(MSGPACK_ZONE_CHUNK_SIZE);
+//        if(*u->z == NULL) {
+//            return MSGPACK_UNPACK_NOMEM_ERROR;
+//        }
+//    }
     o->type = MSGPACK_OBJECT_EXT;
     o->via.ext.type = *p;
     o->via.ext.ptr = p + 1;
